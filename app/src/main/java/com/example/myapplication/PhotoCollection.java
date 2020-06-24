@@ -3,21 +3,21 @@ package com.example.myapplication;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Photo_Base {
+public class PhotoCollection {
 
     @SerializedName("photos")
     @Expose
-    private Photos photos;
+    private PhotoPage photoPage;
     @SerializedName("stat")
     @Expose
     private String stat;
 
-    public Photos getPhotos() {
-        return photos;
+    public PhotoPage getPhotoPage() {
+        return photoPage;
     }
 
-    public void setPhotos(Photos photos) {
-        this.photos = photos;
+    public void setPhotoPage(PhotoPage photoPage) {
+        this.photoPage = photoPage;
     }
 
     public String getStat() {

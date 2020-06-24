@@ -1,24 +1,22 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.ItemClickListener{
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.ItemClickListener {
 
     RecyclerViewAdapter adapter;
 
@@ -26,33 +24,25 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Thread thread= new Thread(new Runnable() {
+        Call<PhotoCollection> call = RetrofitClientInstance.getService().getAllPhotos();
+        call.enqueue(new Callback<PhotoCollection>() {
             @Override
-            public void run() {
-                Endpoints service = RetrofitClientInstance.getRetrofitInstance().create(Endpoints.class);
-                Call<Photo_Base> call = service.getAllPhotos();
-                call.enqueue(new Callback<Photo_Base>() {
-                    @Override
-                    public void onResponse(Call<Photo_Base> call, Response<Photo_Base> response) {
-                        Log.println(Log.DEBUG,"Code", String.valueOf(response.code()));
-                        generateDataList(response.body());
-                    }
+            public void onResponse(@NonNull Call<PhotoCollection> call, @NonNull Response<PhotoCollection> response) {
+                if (response.isSuccessful())
+                    generateDataList(Objects.requireNonNull(response.body()));
+            }
 
-                    @Override
-                    public void onFailure(Call<Photo_Base> call, Throwable t) {
-                        t.printStackTrace();
-                        Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onFailure(@NonNull Call<PhotoCollection> call, @NonNull Throwable t) {
+                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
             }
         });
-        thread.start();
     }
 
-    private void generateDataList(Photo_Base photo_base) {
+    private void generateDataList(PhotoCollection photoCollection) {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         int numberOfColumns = 3;
-        adapter = new RecyclerViewAdapter(this, new ArrayList<>(photo_base.getPhotos().getPhoto()));
+        adapter = new RecyclerViewAdapter(this, photoCollection.getPhotoPage().getPhoto());
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
@@ -60,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent=new Intent(this,FullImage.class);
-        intent.putExtra("id",R.drawable.pic1);
+        Intent intent = new Intent(this, FullImage.class);
+        intent.putExtra("url", adapter.getUrlFromPosition(position));
         startActivity(intent);
     }
 }

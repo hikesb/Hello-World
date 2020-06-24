@@ -1,9 +1,12 @@
 package com.example.myapplication;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+
+import java.util.Objects;
 
 public class FullImage extends Activity {
 
@@ -12,12 +15,11 @@ public class FullImage extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_image);
 
-        Intent i = getIntent();
-
-        int id = i.getExtras().getInt("id");
-
         ImageView imageView = findViewById(R.id.full_image_view);
-        imageView.setImageResource(id);
+
+        String url = Objects.requireNonNull(getIntent().getExtras()).getString("url");
+
+        Glide.with(this).load(url).into(imageView);
     }
 
 }
