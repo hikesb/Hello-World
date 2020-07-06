@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public class RetrofitClientInstance {
 
@@ -19,7 +20,7 @@ public class RetrofitClientInstance {
             .connectTimeout(100, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS).build();
 
-    private static Retrofit getRetrofitInstance() {
+    public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
             retrofit = new retrofit2.Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -36,7 +37,7 @@ public class RetrofitClientInstance {
 
     public interface Endpoints {
 
-        @GET("?method=flickr.photos.search&api_key=3e7cc266ae2b0e0d78e279ce8e361736&format=json&nojsoncallback=1&text=tesla")
-        Call<PhotoCollection> getAllPhotos();
+        @GET("?method=flickr.photos.search&api_key=3e7cc266ae2b0e0d78e279ce8e361736&format=json&nojsoncallback=1")
+        Call<PhotoCollection> getAllPhotos(@Query("text") String text);
     }
 }

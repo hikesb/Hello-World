@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +19,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<Photo> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private Context context;
 
     RecyclerViewAdapter(Context context, ArrayList<Photo> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
-        this.context = context;
     }
 
     @Override
@@ -33,6 +30,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textView.setText(mData.get(position).getTitle());
         Glide.with(holder.imageView.getContext()).load(getUrlFromPosition(position)).placeholder(R.drawable.pic1).
                 error(R.drawable.ic_launcher_background).into(holder.imageView);
+    }
+
+    public void update(ArrayList<Photo> data) {
+        mData.clear();
+        mData.addAll(data);
+        this.notifyDataSetChanged();
     }
 
     void setClickListener(ItemClickListener itemClickListener) {
@@ -51,10 +54,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public String getUrlFromPosition(int position) {
-        String url = "https://farm" + mData.get(position).getFarm() + ".static.flickr.com/" + mData.get(position).getServer()
+        return "https://farm" + mData.get(position).getFarm() + ".static.flickr.com/" + mData.get(position).getServer()
                 + "/" + mData.get(position).getId() + "_" + mData.get(position).getSecret() + ".jpg";
-        Log.d("url", url);
-        return url;
     }
 
     @Override

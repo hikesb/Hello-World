@@ -21,7 +21,7 @@ public class PhotoPage {
     private String total;
     @SerializedName("photo")
     @Expose
-    private ArrayList<Photo> photo = null;
+    private ArrayList<Photo> photos = null;
 
     public Integer getPage() {
         return page;
@@ -55,12 +55,12 @@ public class PhotoPage {
         this.total = total;
     }
 
-    public ArrayList<Photo> getPhoto() {
-        return photo;
+    public ArrayList<Photo> getPhotoList() {
+        return photos;
     }
 
-    public void setPhoto(ArrayList<Photo> photo) {
-        this.photo = photo;
+    public void setPhotoList(ArrayList<Photo> photos) {
+        this.photos = photos;
     }
 
 }
