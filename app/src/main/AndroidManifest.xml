@@ -12,8 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:resizeableActivity="true"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="screenSize|smallestScreenSize
+      |screenLayout|orientation"
+            android:supportsPictureInPicture="true">
+            <layout
+                android:defaultWidth="600dp"
+                android:defaultHeight="500dp"
+                android:gravity="top|end"
+                android:minWidth="300dp"
+                android:minHeight="450dp" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
